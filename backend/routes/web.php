@@ -16,6 +16,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/guide', function () { return view('guide'); })->name('guide');
 
     // Messages
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
