@@ -23,4 +23,17 @@ class SettingsController extends Controller
 
         return back()->with('success', 'API kalit yangilandi');
     }
+
+    public function updateWebhook(Request $request)
+    {
+        $request->validate([
+            'webhook_url' => 'nullable|url|max:500',
+        ]);
+
+        $request->user()->update([
+            'webhook_url' => $request->webhook_url,
+        ]);
+
+        return back()->with('success', 'Webhook URL saqlandi');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Services\WebhookService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -61,6 +62,12 @@ class MessageController extends Controller
 
         $message->update($data);
 
+        // Webhook — pDaftar va boshqa tizimlarga xabar berish
+        if (in_array($request->status, ['sent', 'delivered', 'failed'])) {
+            $message->load('user');
+            app(WebhookService::class)->notifyStatusChange($message);
+        }
+
         // Update campaign counters
         if ($message->campaign_id) {
             $campaign = $message->campaign;
@@ -107,6 +114,10 @@ class MessageController extends Controller
             'direction' => 'incoming',
             'delivered_at' => $request->received_at ?? now(),
         ]);
+
+        // Webhook — kiruvchi SMS haqida xabar berish
+        $message->load('user');
+        app(WebhookService::class)->notifyIncomingSms($message);
 
         return response()->json([
             'success' => true,

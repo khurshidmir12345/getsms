@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name', 'email', 'password', 'phone',
         'api_key', 'api_secret', 'plan_id',
         'sms_limit', 'sms_used', 'is_active',
+        'webhook_url', 'webhook_secret',
     ];
 
     protected $hidden = [
