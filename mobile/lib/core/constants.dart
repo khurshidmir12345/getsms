@@ -1,6 +1,6 @@
 class AppConstants {
   static const String appName = 'SMS Gateway';
-  static const String defaultBaseUrl = 'http://10.0.2.2:8000/api';
+  static const String defaultBaseUrl = 'https://getsms.chefit.uz/api';
 
   // Polling intervals
   static const int heartbeatIntervalSeconds = 30;
