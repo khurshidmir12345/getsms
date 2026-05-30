@@ -19,7 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'phone',
         'api_key', 'api_secret', 'plan_id',
-        'sms_limit', 'sms_used', 'is_active',
+        'sms_limit', 'sms_used', 'is_active', 'role',
         'webhook_url', 'webhook_secret',
     ];
 
@@ -91,6 +91,11 @@ class User extends Authenticatable
     public function activeSubscription()
     {
         return $this->subscriptions()->where('status', 'active')->latest()->first();
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
     }
 
     public function hasReachedSmsLimit(): bool

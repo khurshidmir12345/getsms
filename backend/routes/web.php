@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\CampaignController;
 use App\Http\Controllers\Web\ContactController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Web\DeviceController;
 use App\Http\Controllers\Web\MessageController;
 use App\Http\Controllers\Web\SettingsController;
 use App\Http\Controllers\Web\TemplateController;
+use App\Http\Middleware\SuperAdminAuth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -58,6 +60,29 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Stop impersonating (any authenticated user can stop)
+    Route::post('/stop-impersonate', [AdminDashboardController::class, 'stopImpersonate'])->name('admin.stopImpersonate');
+});
+
+// ────────────────────────────────────────────────────────────
+// SUPER ADMIN PANEL (/admin)
+// ────────────────────────────────────────────────────────────
+Route::middleware(['auth', SuperAdminAuth::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // Users
+    Route::get('/users', [AdminDashboardController::class, 'userIndex'])->name('users.index');
+    Route::get('/users/{user}', [AdminDashboardController::class, 'userShow'])->name('users.show');
+    Route::put('/users/{user}', [AdminDashboardController::class, 'userUpdate'])->name('users.update');
+    Route::delete('/users/{user}', [AdminDashboardController::class, 'userDestroy'])->name('users.destroy');
+    Route::post('/users/{user}/impersonate', [AdminDashboardController::class, 'userImpersonate'])->name('users.impersonate');
+
+    // Devices
+    Route::get('/devices', [AdminDashboardController::class, 'deviceIndex'])->name('devices.index');
+
+    // Messages
+    Route::get('/messages', [AdminDashboardController::class, 'messageIndex'])->name('messages.index');
 });
 
 require __DIR__.'/auth.php';

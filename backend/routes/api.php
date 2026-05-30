@@ -52,6 +52,7 @@ Route::middleware(ApiKeyAuth::class)->prefix('v1')->group(function () {
         $message = $user->messages()->create([
             'device_id' => $device->id,
             'phone_to' => $request->to,
+            'phone_from' => $device->phone_number,
             'body' => $request->body,
             'status' => 'pending',
             'direction' => 'outgoing',
@@ -63,6 +64,7 @@ Route::middleware(ApiKeyAuth::class)->prefix('v1')->group(function () {
             'success' => true,
             'message_id' => $message->id,
             'status' => 'pending',
+            'phone_from' => $device->phone_number,
         ]);
     });
 
@@ -95,6 +97,7 @@ Route::middleware(ApiKeyAuth::class)->prefix('v1')->group(function () {
             $message = $user->messages()->create([
                 'device_id' => $device->id,
                 'phone_to' => $msg['to'],
+                'phone_from' => $device->phone_number,
                 'body' => $msg['body'],
                 'status' => 'pending',
                 'direction' => 'outgoing',
@@ -106,6 +109,7 @@ Route::middleware(ApiKeyAuth::class)->prefix('v1')->group(function () {
                 'to' => $msg['to'],
                 'success' => true,
                 'message_id' => $message->id,
+                'phone_from' => $device->phone_number,
             ];
         }
 

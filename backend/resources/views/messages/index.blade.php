@@ -61,7 +61,7 @@
                 <tr class="bg-slate-50">
                     <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider w-16">#</th>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Yo'nalish</th>
-                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Raqam</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Kimdan → Kimga</th>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Xabar</th>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Holat</th>
                     <th class="px-5 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Qurilma</th>
@@ -91,8 +91,24 @@
                             @endif
                         </td>
 
-                        <td class="px-5 py-3.5 text-sm font-medium text-slate-800 whitespace-nowrap">
-                            {{ $message->direction === 'outgoing' ? $message->phone_to : $message->phone_from }}
+                        <td class="px-5 py-3.5 text-sm whitespace-nowrap">
+                            @if($message->direction === 'outgoing')
+                                <div class="flex items-center gap-1.5">
+                                    @if($message->phone_from)
+                                        <span class="text-slate-400 text-xs font-mono">{{ $message->phone_from }}</span>
+                                        <svg class="w-3 h-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                    @endif
+                                    <span class="font-medium text-slate-800">{{ $message->phone_to }}</span>
+                                </div>
+                            @else
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-medium text-slate-800">{{ $message->phone_from }}</span>
+                                    <svg class="w-3 h-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                    @if($message->phone_to)
+                                        <span class="text-slate-400 text-xs font-mono">{{ $message->phone_to }}</span>
+                                    @endif
+                                </div>
+                            @endif
                         </td>
 
                         <td class="px-5 py-3.5 text-sm text-slate-500 max-w-xs truncate">
